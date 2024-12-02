@@ -17,5 +17,7 @@ docker build -t project_tag .
 After that, you can run the container with the following command:
 
 ```bash
-docker run -it -v $(pwd)/models:/app/models image_name 
+docker run -it image_name
 ```
+
+NOTE: The model is currently persisted in the `artifacts` folder.

@@ -21,7 +21,7 @@ def load_config(config_name):
 
 config = load_config("train_params.yaml")
 
-df = pd.read_csv(f'../../data/train_{config["state"]}.csv')
+df = pd.read_csv(f'{config['processed_data_dir']}/train_{config["state"]}.csv')
 
 ## Split
 
@@ -33,6 +33,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 model = LogisticRegression()
 model.fit(X_train, y_train)
+
+print(X_test.head().to_csv("input_format.csv"))
 y_pred = model.predict(X_test)
 
 ## Evaluation
@@ -43,7 +45,7 @@ print("F1:", f1_score(y_test, y_pred))
 
 
 def persist_model(model, state):
-    pickle.dump(model, open(f'{config["models_dir"]}/model_{state}2.pkl', "wb"))
+    pickle.dump(model, open(f'{config["models_dir"]}/model_{state}.pkl', "wb"))
 
 
 persist_model(model, config["state"])

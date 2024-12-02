@@ -1,0 +1,5 @@
+## Training parameters
+state: AK
+models_dir: artifacts/
+raw_data_dir: ../data/raw/
+processed_data_dir: ../data/processed/

@@ -17,8 +17,4 @@ RUN pip install -r requirements_dev.txt
 
 COPY src/ ./src
 
-COPY data/ ./data
-
-COPY models/ ./models
-
 CMD ["bash"]
