@@ -1,3 +1,7 @@
+import logging
+
+logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
+
 import pickle
 
 from api.process import process
@@ -20,6 +24,9 @@ class models:
         Returns:
             pd.DataFrame: DataFrame with the data ready for prediction
         """
+
+        logging.info("Preparando os dados para a previsão...")
+
         clean_data = self.prep.remove_quotation(data)
         encoder = self.prep.load_job_encoder()
         encoded_data = encoder.transform(clean_data["job"])
@@ -49,6 +56,9 @@ class models:
         Returns:
             str: Probability of fraud
         """
-        prediction = self.model.predict_proba(data)
-        print(f"Fraude: {prediction[0]}")
-        return str(prediction[0])
+        prediction_prob = self.model.predict_proba(data)
+        prediction = self.model.predict(data)
+
+        logging.info(f"Fraude Prob: {prediction_prob[0]}")
+        logging.info(f"Fraude: {prediction}")
+        return str(prediction_prob[0])

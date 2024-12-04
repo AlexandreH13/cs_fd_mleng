@@ -39,7 +39,7 @@ NOTE: The model is currently persisted in the `artifacts` folder.
 
 ### Training
 
-To train the model, you need to run the `train.py` script inside the `src/model` folder. The model training is **parametrized** by the `train_params.yaml` file in order to facilitate the experimenting process. For our purpose, the training is divided for each **state**. In that sense, the main parameters are:
+To train the model, you need to run the `train.py` script inside the `src/model` folder. The model training is **parameterized** by the `train_params.yaml` file in order to facilitate the experimenting process for data scientists. For our purpose, the training is divided for each **state**. In that sense, the main parameters are:
 
 - Model: The model to be used. Currently, the model is **Logistic Regression**.
 - State_Name: The name of the state.
@@ -62,3 +62,7 @@ For this project, we used the following tools:
 - [black](https://github.com/psf/black): format code
 
 ---
+
+### Logging
+
+The logging module is used to log the information of the application. Error information and the metrics are logged in the `app.log` file. The log file is located in the `src/logs` folder. NOTE: The log file is not versioned.

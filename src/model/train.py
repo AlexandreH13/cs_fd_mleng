@@ -4,7 +4,7 @@ import pickle
 
 import joblib
 
-logging.basicConfig(filename="erros.log", level=logging.ERROR)
+logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
 
 import pandas as pd
 import yaml
@@ -22,11 +22,11 @@ class train:
         _type_: _description_
     """
 
-    def __init__(self, model):
-        self.model = model
-        self.CONFIG_PATH = "."
+    def __init__(self):
+        self.CONFIG_PATH = "src/model/"
         self.config = self.load_config("train_params.yaml")
         self.state = self.config["state"]
+        self.model = self.config["model"]
 
     def load_config(self, config_name):
         """Load the config file.
@@ -105,7 +105,7 @@ class train:
 
         y_pred = model.predict(X_test)
         for metric in self.config["evaluation"]:
-            print(f"Métrica: {metric}, Valor: {metrics_dic[metric](y_test, y_pred)}")
+            logging.info(f"Métrica: {metric}, Valor: {metrics_dic[metric](y_test, y_pred)}")
 
     def persist_model(self, model):
         """Save the model in the artifacts folder.
@@ -113,15 +113,19 @@ class train:
         Args:
             model (object): Model to be saved
         """
-        pickle.dump(
-            model, open(f'{self.config["models_dir"]}/model_{self.state}.pkl', "wb")
-        )
+        try:
+            pickle.dump(
+                model, open(f'{self.config["models_dir"]}/model_{self.state}.pkl', "wb")
+            )
+        except Exception as e:
+            logging.error(f"Erro ao persistir o modelo: {e}")
 
     def run(self):
         """Execute the training process."""
+        logging.info("Iniciando o treinamento...")
         self.train_model()
 
 
 if __name__ == "__main__":
-    train = train("lr")
+    train = train()
     train.run()

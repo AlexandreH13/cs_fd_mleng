@@ -1,5 +1,5 @@
 ## Training parameters
-state: CA
+state: AK
 model: lr
 lr:
   random_state: 1
@@ -15,6 +15,6 @@ sample:
 evaluation:
   - f1
   - auc
-models_dir: artifacts/
-raw_data_dir: ../data/raw/
-processed_data_dir: ../data/processed/
+models_dir: src/model/artifacts/
+raw_data_dir: src/data/raw/
+processed_data_dir: src/data/processed/

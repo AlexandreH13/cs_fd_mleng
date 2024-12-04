@@ -1,4 +1,9 @@
+import logging
+
 import joblib
+
+logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
+
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
@@ -20,8 +25,11 @@ class process:
             pd.DataFrame: Data Frame with new encoded columns
         """
         df_res = df
-        encoder = LabelEncoder()
-        encoded_column = encoder.fit_transform(df_res["job"])
+        try:
+            encoder = LabelEncoder()
+            encoded_column = encoder.fit_transform(df_res["job"])
+        except Exception as e:
+            logging.error(f"Erro ao realizar o encoding: {e}")
 
         df_res["job"] = encoded_column
 
@@ -36,7 +44,11 @@ class process:
         Returns:
             joblib.dump: Encoder pickle file
         """
-        encoder = joblib.load(f"src/model/artifacts/encoder_{self.state}.pkl")
+
+        try:
+            encoder = joblib.load(f"src/model/artifacts/encoder_{self.state}.pkl")
+        except FileNotFoundError as e:
+            logging.error(f"Arquivo de encoder não encontrado. Talvez os dados não tenham sido processados. {e}")
         return encoder
 
     def convert_to_int(self, value):
@@ -63,6 +75,10 @@ class process:
             pd.DataFrame: Filtered DataFrame
         """
         df_to_save = df
+        try:
+            df_to_save = df_to_save[df_to_save["state"] == state].reset_index(drop=True)
+        except Exception as e:
+            logging.error(f"Erro ao filtrar o DataFrame. O estado {state} não existe. {e}")
         return df_to_save[df_to_save["state"] == state].reset_index(drop=True)
 
     def fix_data_types(self, df) -> pd.DataFrame:
@@ -72,25 +88,8 @@ class process:
             pd.DataFrame: DataFrame ready for modeling.
         """
         label = df["is_fraud"]
-        print(f"Invalid: {label[~label.isin(['0', '1'])].index}")
 
         df_res = df.iloc[label[label.isin(["0", "1"])].index]  ## Keep only valid data
         label = label.apply(self.convert_to_int)
         df_res["is_fraud"] = label
         return df_res
-
-    def run(self):
-        """Execute all the steps to prepare the data. Save inside the processed folder."""
-        cols_ignore = [
-            "trans_date_trans_time",
-            "merchant",
-            "category",
-            "city",
-            "trans_num",
-            "dob",
-            "is_fraud",
-            "state",
-        ]
-        df_model = self.fix_data_types().sample(frac=1)
-        df_model = df_model.drop(columns=cols_ignore, axis=1)
-        return df_model

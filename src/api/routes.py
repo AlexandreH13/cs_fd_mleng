@@ -36,7 +36,7 @@ def init_routes(app):
             prep = process(state)
             prep_training = transform(state, prep)  # Injeta
             prep_training.run()
-            return jsonify({"status": "ok"}), 200
+            return jsonify({"status": "Dados transformados"}), 200
         except Exception as e:
             logging.error(f"Erro ao realizar a transformação dos dados: {e}")
             return jsonify({"error": str(e)}), 500
