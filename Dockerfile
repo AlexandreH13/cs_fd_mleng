@@ -17,4 +17,6 @@ RUN pip install -r requirements_dev.txt
 
 COPY src/ ./src
 
-CMD ["bash"]
+EXPOSE 5000
+
+CMD ["bash", "-c", "python3 src/api/app.py & bash"]

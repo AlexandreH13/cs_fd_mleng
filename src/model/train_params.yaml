@@ -1,5 +1,20 @@
 ## Training parameters
-state: AK
+state: CA
+model: lr
+lr:
+  random_state: 1
+  solver: 'lbfgs'
+rf:
+  random_state: 1
+  n_estimators: 100
+  max_depth: 10
+  max_leaf_nodes: 100
+sample:
+  random_state: 1
+  test_size: 0.2
+evaluation:
+  - f1
+  - auc
 models_dir: artifacts/
 raw_data_dir: ../data/raw/
 processed_data_dir: ../data/processed/
