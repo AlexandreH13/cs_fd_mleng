@@ -17,7 +17,7 @@
 - [Data Preparation](#data-preparation)
 - [Quality Code](#quality-code)
 - [Logging](#logging)
-- [Docker](#docker)
+- [High Level Diagram](#high-level-diagram)
 
 ---
 
