@@ -63,7 +63,7 @@ Please, check the `train_params.yaml` file for more details.
 
 ### Data Preparation
 
-An endpoint is defined to transform the data. The goal is to read the raw data and persist a training-ready dataset. Also, the encoder pickle file is persisted in the `artifacts` folder.
+An endpoint is defined to transform the data. The goal is to read the raw data and persist a training-ready dataset. Also, the encoder pickle file is persisted in the `artifacts` folder. An important reminder is that **the data is not versioned**. 
 
 ---
 
@@ -79,3 +79,9 @@ For this project, we used the following tools:
 ### Logging
 
 The logging module is used to log the information of the application. Error information and the metrics are logged in the `app.log` file. The log file is located in the `src/logs` folder. NOTE: The log file is not versioned.
+
+---
+
+### High Level Diagram
+
+![High Level Diagram](resources/sol_design.png)
