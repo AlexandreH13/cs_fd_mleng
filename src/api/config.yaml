@@ -1,0 +1,17 @@
+categorical_cols:
+  - job
+  - category
+  - merchant
+ignore_cols_transform:
+  - trans_date_trans_time
+  - trans_num
+  - dob
+  - city
+ignore_cols_predict:
+  - trans_date_trans_time
+  - trans_num
+  - dob
+  - city
+  - state
+
+

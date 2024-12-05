@@ -7,8 +7,21 @@
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+---
 
-**Description**
+### Table of Contents
+
+- [Description](#description)
+- [How to run](#how-to-run)
+- [Training](#training)
+- [Data Preparation](#data-preparation)
+- [Quality Code](#quality-code)
+- [Logging](#logging)
+- [Docker](#docker)
+
+---
+
+### Description
 
 This repo is a case of how to productionize a machine learning model for fraud detection. It is a **Flask** API and has two endpoints:
 

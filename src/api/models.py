@@ -4,14 +4,15 @@ logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
 
 import pickle
 
-from api.process import process
+from api.process import Process
 
 
-class models:
+class Models:
     """Class responsible for loading the model and predicting."""
 
     def __init__(self, prep, state):
         self.prep = prep
+        self.config = prep.load_config("config.yaml")
         self.model = pickle.load(open(f"src/model/artifacts/model_{state}.pkl", "rb"))
         self.state = state
 
@@ -27,24 +28,17 @@ class models:
 
         logging.info("Preparando os dados para a previsão...")
 
-        clean_data = self.prep.remove_quotation(data)
-        encoder = self.prep.load_job_encoder()
-        encoded_data = encoder.transform(clean_data["job"])
-        data["job"] = encoded_data
+        clean_data = self.prep.remove_quotation(data, self.config["categorical_cols"])
 
-        fixed_types_df = self.prep.fix_data_types(data)
-        cols_ignore = [
-            "trans_date_trans_time",
-            "merchant",
-            "category",
-            "city",
-            "trans_num",
-            "dob",
-            "state",
-            "is_fraud",
-        ]
-        df_pred = fixed_types_df.drop(columns=cols_ignore, axis=1).sample(frac=1)
+        for col in self.config["categorical_cols"]:
+            logging.info(f"Transformando {col}...")
+            encoder = self.prep.load_job_encoder(col)
+            encoded_data = encoder.transform(clean_data[col])
+            clean_data[col] = encoded_data
 
+        df_pred = clean_data.drop(
+            columns=self.config["ignore_cols_predict"], axis=1
+        ).sample(frac=1)
         return df_pred
 
     def predict(self, data):

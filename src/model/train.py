@@ -2,8 +2,6 @@ import logging
 import os
 import pickle
 
-import joblib
-
 logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
 
 import pandas as pd
@@ -14,7 +12,7 @@ from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 
 
-class train:
+class Train:
     """
     Class responsible for training the model.
 
@@ -105,7 +103,9 @@ class train:
 
         y_pred = model.predict(X_test)
         for metric in self.config["evaluation"]:
-            logging.info(f"Métrica: {metric}, Valor: {metrics_dic[metric](y_test, y_pred)}")
+            logging.info(
+                f"Métrica: {metric}, Valor: {metrics_dic[metric](y_test, y_pred)}"
+            )
 
     def persist_model(self, model):
         """Save the model in the artifacts folder.
@@ -127,5 +127,5 @@ class train:
 
 
 if __name__ == "__main__":
-    train = train()
+    train = Train()
     train.run()

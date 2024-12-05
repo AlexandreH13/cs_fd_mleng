@@ -3,8 +3,8 @@ import logging
 import pandas as pd
 from flask import jsonify, request
 
-from api.models import models
-from api.process import process
+from api.models import Models
+from api.process import Process
 from api.transform import transform
 
 
@@ -18,8 +18,8 @@ def init_routes(app):
             state = data[0]["state"]
             df_pred = pd.DataFrame(data)
 
-            prep = process(state)
-            model = models(prep, state)  # Injeta
+            prep = Process(state)
+            model = Models(prep, state)  # Injeta
 
             df_pred = model.prepare_prediction(df_pred)
             prediction = model.predict(df_pred)
@@ -33,7 +33,7 @@ def init_routes(app):
         """Define the transformation route."""
         try:
             state = request.json[0]["state"]
-            prep = process(state)
+            prep = Process(state)
             prep_training = transform(state, prep)  # Injeta
             prep_training.run()
             return jsonify({"status": "Dados transformados"}), 200

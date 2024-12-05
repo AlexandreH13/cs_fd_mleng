@@ -1,6 +1,6 @@
 ## Training parameters
 state: AK
-model: lr
+model: rf
 lr:
   random_state: 1
   solver: 'lbfgs'
@@ -15,6 +15,10 @@ sample:
 evaluation:
   - f1
   - auc
+categorical_cols:
+  - job
+  - category
+  - merchant
 models_dir: src/model/artifacts/
 raw_data_dir: src/data/raw/
 processed_data_dir: src/data/processed/

@@ -1,6 +1,8 @@
 import logging
+import os
 
 import joblib
+import yaml
 
 logging.basicConfig(filename="src/logs/app.log", level=logging.DEBUG)
 
@@ -8,37 +10,55 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 
-class process:
+class Process:
     """Class responsible for preparing the data for prediction."""
 
     def __init__(self, state):
         self.state = state
+        self.CONFIG_PATH = "src/api/"
 
-    def remove_quotation(self, df):
-        df["job"] = df["job"].apply(lambda x: x.replace('"', ""))
+    def load_config(self, config_name):
+        """Load the config file.
+
+        Args:
+            config_name (str): Name of the config file
+
+        Returns:
+            dict: Config file
+        """
+        with open(os.path.join(self.CONFIG_PATH, config_name)) as file:
+            config = yaml.safe_load(file)
+
+        return config
+
+    def remove_quotation(self, df, cols):
+        for col in cols:
+            df[col] = df[col].apply(lambda x: x.replace('"', ""))
         return df
 
-    def job_encode(self, df) -> pd.DataFrame:
+    def job_encode(self, df, cols) -> pd.DataFrame:
         """Performs label encoding on the categorical columns
 
         Returns:
             pd.DataFrame: Data Frame with new encoded columns
         """
         df_res = df
+
         try:
-            encoder = LabelEncoder()
-            encoded_column = encoder.fit_transform(df_res["job"])
+            for col in cols:
+                encoder = LabelEncoder()
+                encoded_column = encoder.fit_transform(df_res[col])
+                df_res[col] = encoded_column
+                joblib.dump(
+                    encoder, f"src/model/artifacts/encoder_{self.state}_{col}.pkl"
+                )
+                logging.info(f"Encoder {col} Salvo!")
         except Exception as e:
             logging.error(f"Erro ao realizar o encoding: {e}")
 
-        df_res["job"] = encoded_column
-
-        joblib.dump(encoder, f"src/model/artifacts/encoder_{self.state}.pkl")
-        print("Encoder Salvo!")
-
         return df_res
 
-    def load_job_encoder(self):
+    def load_job_encoder(self, col):
         """Load the encoder pickle file.
 
         Returns:
@@ -46,9 +66,11 @@ class process:
         """
 
         try:
-            encoder = joblib.load(f"src/model/artifacts/encoder_{self.state}.pkl")
+            encoder = joblib.load(f"src/model/artifacts/encoder_{self.state}_{col}.pkl")
         except FileNotFoundError as e:
-            logging.error(f"Arquivo de encoder não encontrado. Talvez os dados não tenham sido processados. {e}")
+            logging.error(
+                f"Arquivo de encoder não encontrado. Talvez os dados não tenham sido processados. {e}"
+            )
         return encoder
 
     def convert_to_int(self, value):
@@ -78,7 +100,9 @@ class process:
         try:
             df_to_save = df_to_save[df_to_save["state"] == state].reset_index(drop=True)
         except Exception as e:
-            logging.error(f"Erro ao filtrar o DataFrame. O estado {state} não existe. {e}")
+            logging.error(
+                f"Erro ao filtrar o DataFrame. O estado {state} não existe. {e}"
+            )
         return df_to_save[df_to_save["state"] == state].reset_index(drop=True)
 
     def fix_data_types(self, df) -> pd.DataFrame:
