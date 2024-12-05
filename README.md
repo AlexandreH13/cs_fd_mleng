@@ -48,6 +48,20 @@ docker run -it -p 5000:5000 image_name
 
 NOTE: The model is currently persisted in the `artifacts` folder.
 
+Once the conteiner is runnint, you can choose one of the states to prepare the data for training. At localhost:5000/transform use the following input:
+
+```json
+{"state": "CA"}
+```
+
+A new file will be created in the `src/data/processed` folder. This file is the training-ready dataset. To train the model, check the [Training](#training) section.
+
+After the training is finished, you can use the `/predict` endpoint to predict the probability of fraud. At localhost:5000/predict use the following input as an example:
+
+```json
+{"trans_date_trans_time":"23-03-2019 01:09","merchant":"Greenholt, Jacobi and Gleason","category":"gas_transport","amt":9.94,"city":"Kaktovik","state":"AK","lat":66.6933,"long":-153.994,"city_pop":239,"job":"Careers information officer","dob":"01-04-1996","trans_num":"da81318af6e1918b067de24bbd9744d5","merch_lat":66.252098,"merch_long":-154.718147}
+```
+
 ---
 
 ### Training
