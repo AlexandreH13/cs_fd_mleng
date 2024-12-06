@@ -36,7 +36,7 @@ class Process:
             df[col] = df[col].apply(lambda x: x.replace('"', ""))
         return df
 
-    def job_encode(self, df, cols) -> pd.DataFrame:
+    def encode_cols(self, df, cols) -> pd.DataFrame:
         """Performs label encoding on the categorical columns
 
         Returns:

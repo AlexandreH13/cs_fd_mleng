@@ -43,7 +43,7 @@ docker build -t project_tag .
 After that, you can run the container with the following command:
 
 ```bash
-docker run -it -p 5000:5000 image_name
+docker run -it -p 5000:5000 --mount type=bind,source=/src/logs,target=/app/src/logs image_name
 ```
 
 NOTE: The model is currently persisted in the `artifacts` folder.
@@ -66,12 +66,18 @@ After the training is finished, you can use the `/predict` endpoint to predict t
 
 ### Training
 
-To train the model, you need to run the `train.py` script inside the `src/model` folder. The model training is **parameterized** by the `train_params.yaml` file in order to facilitate the experimenting process for data scientists. For our purpose, the training is divided for each **state**. In that sense, the main parameters are:
+The model training is **parameterized** by the `train_params.yaml` file in order to facilitate the experimenting process for data scientists. For our purpose, the training is divided for each **state**. In that sense, the main parameters are:
 
 - Model: The model to be used. Currently, the model is **Logistic Regression**.
 - State_Name: The name of the state.
 
 Please, check the `train_params.yaml` file for more details.
+
+To run an experiment, you can use the `train.sh` script:
+
+```bash
+./train.sh
+```
 
 ---
 
