@@ -26,7 +26,7 @@ class transform:
             pd.DataFrame: DataFrame with raw data
         """
         try:
-            df = pd.read_csv("src/data/raw/fraud_data.csv")
+            df = pd.read_csv("src/data/processed/fraud_data_train.csv")
         except FileNotFoundError as e:
             logging.error(f"Raw data não foi encontrado. {e}")
 
@@ -59,7 +59,7 @@ class transform:
         filtered_df = self.prep.remove_quotation(
             filtered_df, self.config["categorical_cols"]
         )
-        encoded_df = self.prep.job_encode(filtered_df, self.config["categorical_cols"])
+        encoded_df = self.prep.encode_cols(filtered_df, self.config["categorical_cols"])
         fixed_types_df = self.prep.fix_data_types(encoded_df)
 
         state = fixed_types_df["state"].iloc[0]
