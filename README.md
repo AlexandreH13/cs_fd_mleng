@@ -106,4 +106,4 @@ The logging module is used to log the information of the application. Error info
 
 ### High Level Diagram
 
-![High Level Diagram](resources/sol_design.png)
+![High Level Diagram](resources/sol_design_train.png)
