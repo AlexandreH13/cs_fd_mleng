@@ -28,19 +28,19 @@ This repo is a case of how to productionize a machine learning model for fraud d
 - `/predict`: predict the probability of fraud
 - `/transform`: transform the data to persist a training-ready dataset
 
-The model is persisted in the `artifacts` folder. To run the model training, check the session [Training](#training)
+The model is persisted in the `artifacts` folder, which simulates a storage localtion to persist artifacts. To run the model training, check the session [Training](#training)
 
 ---
 
 ### How to run
 
-For now **the case is in development**. The sugestion is to build the docker image and run the container.
+The sugestion is to build the docker image and run the container.
 
 ```bash
 docker build -t project_tag .
 ```
 
-After that, you can run the container with the following command:
+After the building, you can run the container with the following command:
 
 ```bash
 docker run -it -p 5000:5000 --mount type=bind,source=/src/logs,target=/app/src/logs image_name
@@ -48,13 +48,13 @@ docker run -it -p 5000:5000 --mount type=bind,source=/src/logs,target=/app/src/l
 
 NOTE: The model is currently persisted in the `artifacts` folder.
 
-Once the conteiner is runnint, you can choose one of the states to prepare the data for training. At localhost:5000/transform use the following input:
+Once the container is running, you can choose one of the states to prepare the data for training. At localhost:5000/transform use the following input:
 
 ```json
 {"state": "CA"}
 ```
 
-A new file will be created in the `src/data/processed` folder. This file is the training-ready dataset. To train the model, check the [Training](#training) section.
+A new file will be created in the `src/data/processed` folder. On a real production environment, this folder would be a storage location. The file is the training-ready dataset. To train the model, check the [Training](#training) section.
 
 After the training is finished, you can use the `/predict` endpoint to predict the probability of fraud. At localhost:5000/predict use the following input as an example:
 
@@ -65,6 +65,8 @@ After the training is finished, you can use the `/predict` endpoint to predict t
 ---
 
 ### Training
+
+This solution suggests using a **multi repo** structure. For this reason, the training can be found in the repository at [this link](https://github.com/AlexandreH13/cs_fd_training/tree/main). However, to test the entire cycle (data transformation/preparation, training and prediction) the code for training the models was also left in this repository. But in a productive environment, **multi repo should ideally be used**.
 
 The model training is **parameterized** by the `train_params.yaml` file in order to facilitate the experimenting process for data scientists. For our purpose, the training is divided for each **state**. In that sense, the main parameters are:
 
