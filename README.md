@@ -16,6 +16,7 @@
 - [Training](#training)
 - [Data Preparation](#data-preparation)
 - [Quality Code](#quality-code)
+- [Data Persistence](#data-persistence)
 - [Logging](#logging)
 - [High Level Diagram](#high-level-diagram)
 
@@ -34,21 +35,21 @@ The model is persisted in the `artifacts` folder, which simulates a storage loca
 
 ### How to run
 
-The sugestion is to build the docker image and run the container.
+In this example we have **two services**: 1) The Flask API to transform and predict the data; 2) The MySQL database to persist the prediction results. A docker compose file is provided to facilitate the deployment. Before running the compose file, you need to build the MySQL image. The Dockerfile for this image is located in the `src/data` folder.
 
 ```bash
-docker build -t project_tag .
+docker build -t dbml .
 ```
 
-After the building, you can run the container with the following command:
+After the building, you can run the compose file with the following command:
 
 ```bash
-docker run -it -p 5000:5000 --mount type=bind,source=/src/logs,target=/app/src/logs image_name
+docker-compose up --build
 ```
 
-NOTE: The model is currently persisted in the `artifacts` folder.
+The command above will create the two services. NOTE: The model is currently persisted in the `artifacts` folder.
 
-Once the container is running, you can choose one of the states to prepare the data for training. At localhost:5000/transform use the following input:
+Once the predict container is running, you can choose one of the **states** to prepare the data for training. At localhost:5000/transform endpoint use the following input (Chose the desired state. California is used as example): 
 
 ```json
 {"state": "CA"}
@@ -78,7 +79,7 @@ Please, check the `train_params.yaml` file for more details.
 To run an experiment, you can use the `train.sh` script:
 
 ```bash
-./train.sh
+./train_model.sh
 ```
 
 ---
@@ -95,6 +96,24 @@ For this project, we used the following tools:
 
 - [isort](https://github.com/PyCQA/isort): sort imports
 - [black](https://github.com/psf/black): format code
+
+---
+
+### Data Persistence
+
+One of the services provided by this solution is the MySQL database. The database is used to persist the prediction results. The host name is `mysql` and the database name is `Db_Ml`, but you can change these values in the `docker-compose.yml` file.
+
+NOTE: You also need to provide the credentials for the MySQL database, such as the username and password. These values are also defined in the `docker-compose.yml` file as environment variables.
+
+---
+
+### Debugging
+
+You can execute the container to chec the log file.
+
+```bash
+docker exec -it predict bash
+```
 
 ---
 

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  predict:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    container_name: predict
+    environment:
+      DB_HOST: [HOST]
+      DB_NAME: Db_Ml
+      DB_USER: [USER]
+      DB_PASSWORD: [PASS]
+    ports:
+      - "5000:5000" 
+
+  mysql:
+    image: dbml
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: [ROOT PASS]
+      MYSQL_DATABASE: Db_Ml
+      MYSQL_USER: [USER]
+      MYSQL_PASSWORD: [USER PASS]
+    volumes:
+      - db-volume:/var/lib/mysql
+    
+volumes:
+  db-volume:
+    driver: local
+
