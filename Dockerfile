@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     vim
 
-# python 3 default
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /app
@@ -17,8 +16,8 @@ RUN pip install -r requirements_dev.txt
 
 COPY src/ ./src
 
-RUN chmod +x /app/src/model/train_model.sh
+RUN chmod +x src/model/train_model.sh
 
 EXPOSE 5000
 
-CMD ["bash", "-c", "python3 src/api/app.py & bash"]
+CMD ["python3", "src/api/app.py"]

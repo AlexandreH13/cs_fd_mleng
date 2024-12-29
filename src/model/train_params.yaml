@@ -1,5 +1,5 @@
 ## Training parameters
-state: AK
+state: CA
 model: rf
 lr:
   random_state: 1
