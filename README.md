@@ -17,6 +17,7 @@
 - [Data Preparation](#data-preparation)
 - [Quality Code](#quality-code)
 - [Data Persistence](#data-persistence)
+- [Debugging](#debugging)
 - [Logging](#logging)
 - [High Level Diagram](#high-level-diagram)
 
